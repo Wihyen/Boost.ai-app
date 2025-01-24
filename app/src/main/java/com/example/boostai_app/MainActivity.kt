@@ -1,3 +1,22 @@
+//  boost.ai Android SDK
+//  Copyright © 2021 boost.ai
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+//  Please contact us at contact@boost.ai if you have any questions.
+//
+
 package com.example.boostai_app
 
 import android.content.res.ColorStateList
@@ -12,12 +31,9 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.serialization.json.JsonElement
 import no.boostai.sdk.ChatBackend.ChatBackend
-import no.boostai.sdk.ChatBackend.Objects.ChatConfig
-import no.boostai.sdk.ChatBackend.Objects.ChatPanel
-import no.boostai.sdk.ChatBackend.Objects.Settings
-import no.boostai.sdk.ChatBackend.Objects.Styling
-import no.boostai.sdk.UI.ChatViewFragment
+import no.boostai.sdk.ChatBackend.Objects.*
 import no.boostai.sdk.UI.Events.BoostUIEvents
+import no.boostai.sdk.UI.ChatViewFragment
 
 class MainActivity : AppCompatActivity(R.layout.activity_main),
     ChatBackend.ConfigObserver,
@@ -67,6 +83,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         adapter.addFragment(
             ChatViewFragment(customConfig = customConfig),
             getString(R.string.fullscreen)
+        )
+
+        adapter.addFragment(
+            FloatingAvatarFragment(customConfig = customConfig),
+            getString(R.string.avatar)
         )
 
         tabLayout?.setupWithViewPager(viewPager)
@@ -134,7 +155,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
     }
 
     override fun onUIEventReceived(event: BoostUIEvents.Event, detail: Any?) {
-        println("Boost UI event: $event, detail: $detail")
+        println("Boost UI event: $event, detail: $detail");
     }
 
 }
