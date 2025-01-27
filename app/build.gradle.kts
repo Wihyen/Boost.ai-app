@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation("com.glia:android-widgets:2.8.3")
+    implementation(libs.material.v110beta01)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

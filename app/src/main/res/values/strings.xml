@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Boost.ai_app</string>
     <string name="fullscreen">Fullscreen</string>
+    <string name="glia_test">Glia test</string>
     <string name="avatar">Avatar</string>
     <string name="image">Image</string>
     <string name="vide">Video</string>
