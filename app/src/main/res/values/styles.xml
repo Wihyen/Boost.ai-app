@@ -1,0 +1,10 @@
+<resources>
+    <!-- Ensure your theme extends from Theme.AppCompat or Theme.MaterialComponents -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme if needed -->
+    </style>
+    <style name="ShapeAppearanceOverlay.App.CornerSizeSmall" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+</resources>

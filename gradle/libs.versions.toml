@@ -1,5 +1,7 @@
 [versions]
 agp = "8.8.0"
+appcompat = "1.7.0"
+googleMaterial = "1.9.0"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -14,6 +16,7 @@ mobileSdkAndroid = "1.2.0"
 mobileSdkAndroidVersion = "1.2.0"
 
 [libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -30,6 +33,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material-v110beta01 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+material-v190 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
 mobile-sdk-android = { group = "com.github.BoostAI", name = "mobile-sdk-android", version.ref = "mobileSdkAndroid" }
 mobile-sdk-android-v120 = { module = "com.github.BoostAI:mobile-sdk-android", version.ref = "mobileSdkAndroidVersion" }
 

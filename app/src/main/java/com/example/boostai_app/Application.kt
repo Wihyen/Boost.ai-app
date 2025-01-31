@@ -6,12 +6,16 @@ import com.glia.widgets.GliaWidgets
 import com.glia.widgets.GliaWidgetsConfig
 
 class Application : Application() {
-
     override fun onCreate() {
         super.onCreate()
 
+        // Initialize GliaWidgets
         GliaWidgets.onAppCreate(this)
 
+        // Set the custom card adapter
+        GliaWidgets.setCustomCardAdapter(ExampleCustomCardAdapter())
+
+        // Configure Glia with required settings
         val gliaConfig = GliaWidgetsConfig.Builder()
             .setCompanyName("boost.ai")
             .setSiteApiKey(
@@ -24,6 +28,8 @@ class Application : Application() {
             .setRegion("us")
             .setContext(applicationContext)
             .build()
+
+        // Initialize GliaWidgets with the configuration
         GliaWidgets.init(gliaConfig)
     }
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Boost.ai_app</string>
+    <string name="app_name">Glia test</string>
     <string name="fullscreen">Fullscreen</string>
     <string name="glia_test">Glia test</string>
+    <string name="hello">Hello There</string>
     <string name="avatar">Avatar</string>
     <string name="image">Image</string>
     <string name="vide">Video</string>
