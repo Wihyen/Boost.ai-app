@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
     }
 
     override fun onUIEventReceived(event: BoostUIEvents.Event, detail: Any?) {
-        println("Boost UI event: $event, detail: $detail");
+        println("Boost UI event: $event, detail: $detail")
     }
 
 }
