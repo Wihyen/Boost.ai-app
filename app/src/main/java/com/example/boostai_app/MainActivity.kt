@@ -1,34 +1,17 @@
-//  boost.ai Android SDK
-//  Copyright © 2021 boost.ai
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-//
-//  Please contact us at contact@boost.ai if you have any questions.
-//
-
 package com.example.boostai_app
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.serialization.json.JsonElement
 import no.boostai.sdk.ChatBackend.ChatBackend
 import no.boostai.sdk.ChatBackend.Objects.*
@@ -41,7 +24,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
     ChatBackend.EventObserver {
 
     private var toolbar: Toolbar? = null
-    private var viewPager: ViewPager? = null
+    private var viewPager: ViewPager2? = null
     private var tabLayout: TabLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,15 +37,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
             chatPanel = ChatPanel(
                 styling = Styling(
                     // Style colors etc.
-                    /*primaryColor = getColor(android.R.color.holo_red_dark),
-                    contrastColor = getColor(android.R.color.holo_orange_light),
+                    primaryColor = getColor(R.color.primaryColor),
+                    contrastColor = getColor(R.color.contrastColor),
                     chatBubbles = ChatBubbles(
-                        vaTextColor = getColor(android.R.color.white),
-                        vaBackgroundColor = getColor(android.R.color.holo_green_dark)
+                        vaTextColor = getColor(R.color.vaTextColor),
+                        vaBackgroundColor = getColor(R.color.vaBackgroundColor)
                     ),
                     buttons = Buttons(
-                        multiline = true
-                    )*/
+                        multiline = true,
+                        textColor = getColor(R.color.buttonTextColor) // Set the font color for buttons here
+                    )
                 ),
                 settings = Settings(
                     //conversationId = "[pass a stored conversationId here to resume conversation]",
@@ -75,25 +59,26 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tab_layout)
 
+        if (toolbar != null && viewPager != null && tabLayout != null) {
+            setSupportActionBar(toolbar)
+            tabLayout!!.background = ColorDrawable(getColor(R.color.purple))
+
+            // Create viewPager adapter
+            val adapter = ViewPagerAdapter(this).apply {
+                addFragment(ChatViewFragment(customConfig = customConfig), getString(R.string.fullscreen))
+                addFragment(FloatingAvatarFragment(customConfig = customConfig), getString(R.string.avatar))
+            }
+
+            viewPager!!.adapter = adapter
+
+            TabLayoutMediator(tabLayout!!, viewPager!!) { tab, position ->
+                tab.text = adapter.getPageTitle(position)
+            }.attach()
+        } else {
+            Log.e("MainActivity", "Failed to initialize UI components")
+        }
+
         tabLayout?.background = ColorDrawable(getColor(R.color.purple))
-
-        // Create viewPager adapter
-        val adapter = ViewPagerAdapter(supportFragmentManager)
-
-        adapter.addFragment(
-            ChatViewFragment(customConfig = customConfig),
-            getString(R.string.fullscreen)
-        )
-
-        adapter.addFragment(
-            FloatingAvatarFragment(customConfig = customConfig),
-            getString(R.string.avatar)
-        )
-
-        tabLayout?.setupWithViewPager(viewPager)
-        viewPager?.adapter = adapter
-
-        setSupportActionBar(toolbar)
 
         updateStyling(ChatBackend.config)
         ChatBackend.addConfigObserver(this)
@@ -101,19 +86,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         BoostUIEvents.addObserver(this)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private inner class ViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-        ChatBackend.removeConfigObserver(this)
-        ChatBackend.removeEventObserver(this)
-        BoostUIEvents.removeObserver(this)
-    }
-
-    internal class ViewPagerAdapter(manager: FragmentManager) :
-        FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-        private var fragments: ArrayList<Fragment> = ArrayList()
-        private var fragmentTitles: ArrayList<String> = ArrayList()
+        private val fragments = mutableListOf<Fragment>()
+        private val fragmentTitles = mutableListOf<String>()
 
         // Add fragment to the viewPager
         fun addFragment(fragment: Fragment, title: String) {
@@ -121,26 +97,28 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
             fragmentTitles.add(title)
         }
 
-        override fun getPageTitle(position: Int): CharSequence = fragmentTitles[position]
+        fun getPageTitle(position: Int): CharSequence = fragmentTitles[position]
 
-        override fun getCount(): Int = fragments.size
+        override fun getItemCount(): Int = fragments.size
 
-        override fun getItem(position: Int): Fragment = fragments[position]
+        override fun createFragment(position: Int): Fragment = fragments[position]
     }
 
     private fun updateStyling(config: ChatConfig?) {
-        if (config == null) return
+        config?.chatPanel?.styling?.apply {
+            // Update toolbar and TabLayout background color
+            primaryColor?.let {
+                val primaryColorDrawable = ColorDrawable(it)
+                toolbar?.background = primaryColorDrawable
+                tabLayout?.background = primaryColorDrawable
+                viewPager?.background = primaryColorDrawable
+            }
 
-        config.chatPanel?.styling?.primaryColor?.let {
-            val primaryColorDrawable = ColorDrawable(it)
-            toolbar?.background = primaryColorDrawable
-            tabLayout?.background = primaryColorDrawable
-            viewPager?.background = primaryColorDrawable
-        }
-
-        config.chatPanel?.styling?.contrastColor?.let { contrastColor ->
-            tabLayout?.tabTextColors = ColorStateList.valueOf(contrastColor)
-            tabLayout?.setSelectedTabIndicatorColor(contrastColor)
+            // Update tab text and selected indicator colors
+            contrastColor?.let { contrastColor ->
+                tabLayout?.tabTextColors = ColorStateList.valueOf(contrastColor)
+                tabLayout?.setSelectedTabIndicatorColor(contrastColor)
+            }
         }
     }
 
@@ -152,6 +130,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
 
     override fun onBackendEventReceived(backend: ChatBackend, type: String, detail: JsonElement?) {
         println("Boost backend event: $type, detail: $detail")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ChatBackend.removeConfigObserver(this)
+        ChatBackend.removeEventObserver(this)
+        BoostUIEvents.removeObserver(this)
     }
 
     override fun onUIEventReceived(event: BoostUIEvents.Event, detail: Any?) {
