@@ -1,0 +1,39 @@
+//  boost.ai Android SDK
+//  Copyright © 2021 boost.ai
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+//  Please contact us at contact@boost.ai if you have any questions.
+//
+
+package com.example.boostai_app
+
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import androidx.fragment.app.Fragment
+
+class SettingsFragment(
+) : Fragment(R.layout.settings) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val resetConversationButton: Button = view.findViewById(R.id.reset_conversation_button)
+
+        resetConversationButton.setOnClickListener{
+            resetConversationButton.text = getString(R.string.nice)
+        }
+    }
+
+}

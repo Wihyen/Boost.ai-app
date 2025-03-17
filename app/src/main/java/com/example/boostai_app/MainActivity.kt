@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ChatBackend.domain = "william.boost.ai" // Replace with your boost.ai server domain name, i.e. "your-name.boost.ai"
+        ChatBackend.domain = "williamtest.boost.ai" // Replace with your boost.ai server domain name, i.e. "your-name.boost.ai"
         ChatBackend.languageCode = "en-US"
 
         val customConfig = ChatConfig(
@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
             val adapter = ViewPagerAdapter(this).apply {
                 addFragment(ChatViewFragment(customConfig = customConfig), getString(R.string.fullscreen))
                 addFragment(FloatingAvatarFragment(customConfig = customConfig), getString(R.string.avatar))
+                addFragment(SettingsFragment(), getString(R.string.settings))
             }
 
             viewPager!!.adapter = adapter
