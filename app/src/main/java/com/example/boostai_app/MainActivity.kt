@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
                 settings = Settings(
                     //conversationId = "[pass a stored conversationId here to resume conversation]",
                     //startLanguage = "[set preferred BCP47 language for welcome message, i.e. en-US]"
+                    fileUploadServiceEndpointUrl = "https://royo.boost.ai/file_upload"
                 )
             )
         )
