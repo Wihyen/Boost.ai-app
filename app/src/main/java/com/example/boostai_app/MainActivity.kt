@@ -30,9 +30,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ChatBackend.domain = "william.boost.ai" // Replace with your boost.ai server domain name, i.e. "your-name.boost.ai"
+        ChatBackend.domain = "boostwilliam.ngrok.io" // Replace with your boost.ai server domain name, i.e. "your-name.boost.ai"
         ChatBackend.languageCode = "en-US"
-
         val customConfig = ChatConfig(
             chatPanel = ChatPanel(
                 styling = Styling(
